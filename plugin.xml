@@ -17,34 +17,27 @@
   specific language governing permissions and limitations
   under the License.
 -->
-
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-      id="cordova-plugin-packagemanager"
-      version="0.1.5">
+<plugin 
+    xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-packagemanager" version="0.1.7">
     <name>PackageManager</name>
     <description>Cordova plugin return a list of installed applications or all on your smartphone.</description>
     <license>Apache 2.0</license>
     <keywords>cordova,packagemanager</keywords>
     <repo>https://github.com/fbsanches/cordova-plugin-packagemanager</repo>
     <issue>https://github.com/fbsanches/cordova-plugin-packagemanager/issues</issue>
-
     <js-module src="www/packagemanager.js" name="packagemanager">
-        <clobbers target="packagemanager" />
+        <clobbers target="window.plugins.packagemanager" />
     </js-module>
-
     <config-file target="AndroidManifest.xml" parent="/*">
-		<uses-permission android:name="android.permission.GET_TASKS"/>
+        <uses-permission android:name="android.permission.GET_TASKS"/>
     </config-file>
-    
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="packagemanager" >
+            <feature name="packagemanager">
                 <param name="android-package" value="fc.fcstudio.packagemanager"/>
             </feature>
         </config-file>
-
         <source-file src="src/android/packagemanager.java" target-dir="src/fc/fcstudio" />
     </platform>
-
 </plugin>
