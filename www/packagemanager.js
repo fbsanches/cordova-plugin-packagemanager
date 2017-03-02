@@ -29,9 +29,7 @@ module.exports = {
   show: function (installedApps, successCallback, errorCallback) {
     var services = "packagemanager";
     var dependentProperties = [];
-    dependentProperties.push({
-      installedApps
-    });
+    dependentProperties.push(installedApps);
     var action = "start"; //Fix actions one method.
     exec(successCallback, errorCallback, services, action, dependentProperties);
   }
