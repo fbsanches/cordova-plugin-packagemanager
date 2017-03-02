@@ -28,9 +28,8 @@ var exec = require('cordova/exec');
 module.exports = {
   show: function (installedApps, successCallback, errorCallback) {
     var services = "packagemanager";
-    var dependentProperties = [];
-    dependentProperties.push(installedApps);
-    var action = "start"; //Fix actions one method.
-    exec(successCallback, errorCallback, services, action, dependentProperties);
+    var action = "none";
+    if (installedApps) action = "all";
+    exec(successCallback, errorCallback, services, action, [{}]);
   }
 }
