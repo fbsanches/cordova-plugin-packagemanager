@@ -23,28 +23,13 @@
  * This class contains information about the current the package manager.
  */
 
-function packagemanager() {
+var exec = require('cordova/exec');
+
+module.exports = {
+  show: function (installedApps, successCallback, errorCallback) {
+    var services = "packagemanager";
+    var action = "none";
+    if (installedApps) action = "all";
+    exec(successCallback, errorCallback, services, action, [{}]);
+  }
 }
-
-packagemanager.prototype.show = function(installedApps, successCallback, errorCallback) {
-	var services = "packagemanager";
-	var dependentProperties = [];
-	dependentProperties.push({ installedApps });
-
-	var action = "start"; //Fix actions one method.
-	cordova.exec(successCallback, errorCallback, services, action, dependentProperties);
-};
-
-var mexpt = new packagemanager();
-
-packagemanager.install = function() {
-	if (!window.plugins) {
-		window.plugins = {};
-	}
-
-	window.plugins.packagemanager = new packagemanager();
-	return window.plugins.packagemanager;
-};
-
-module.exports = mexpt;
-cordova.addConstructor(packagemanager.install);

@@ -29,38 +29,33 @@ public class packagemanager extends CordovaPlugin {
 
         context = IS_AT_LEAST_LOLLIPOP ? cordova.getActivity().getWindow().getContext() : cordova.getActivity().getApplicationContext();
 
-        if (action.equals("start")) {
+        ArrayList<String> list = new ArrayList<String>();
 
-            ArrayList<String> list = new ArrayList<String>();
-
-            for (int i = 0; i < args.length(); i++) {
-                JSONObject jsonobject = args.getJSONObject(i);
-                instApp = jsonobject.getBoolean("installedApps");
+        if (action.equals("all")) {
+            final PackageManager pm = cordova.getActivity().getPackageManager();
+            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            List<ResolveInfo> apps = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA);
+            for (ResolveInfo packageInfo : apps) {
+                list.add(packageInfo.activityInfo.applicationInfo.uid + ";" + packageInfo.activityInfo.applicationInfo.dataDir + ";" + packageInfo.activityInfo.applicationInfo.packageName);
             }
-
-            if (instApp) {
-                final PackageManager pm = cordova.getActivity().getPackageManager();
-                Intent intent = new Intent(Intent.ACTION_MAIN, null);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                List<ResolveInfo> apps = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA);
-                for (ResolveInfo packageInfo : apps) {
-                    list.add(packageInfo.activityInfo.applicationInfo.uid + ";" + packageInfo.activityInfo.applicationInfo.dataDir + ";" + packageInfo.activityInfo.applicationInfo.packageName);
-                }
-            } else {
-                List<ApplicationInfo> listInstalledApps = getInstalledApps(context);
-                for (ApplicationInfo packageInfo : listInstalledApps) {
-                    list.add(packageInfo.uid + ";" + packageInfo.dataDir + ";" + packageInfo.packageName);
-                }
+        } else if(action.equals("none")) {
+            List<ApplicationInfo> listInstalledApps = getInstalledApps(context);
+            for (ApplicationInfo packageInfo : listInstalledApps) {
+                list.add(packageInfo.uid + ";" + packageInfo.dataDir + ";" + packageInfo.packageName);
             }
+        }
 
+        if (action.equals("all") || action.equals("none")) {
             JSONArray jResult = new JSONArray(list);
             PluginResult pr = new PluginResult(PluginResult.Status.OK, jResult);
             callbackContext.sendPluginResult(pr);
+            // callbackContext.success(jResult.toString());
             return true;
+        } else {
+            callbackContext.error("PackageManager " + action + " is not a supported function.");
+            return false;
         }
-
-        callbackContext.error("PackageManager " + action + " is not a supported function.");
-        return false;
     }
 
     public static List<ApplicationInfo> getInstalledApps(Context ctx) {
