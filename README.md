@@ -1,5 +1,3 @@
-[![npm version][version-img]][version-url]
-
 ---
 Title: Information Installed Applications
 description: Returns a custom list of applications installed on the system.
